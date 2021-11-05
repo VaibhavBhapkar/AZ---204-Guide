@@ -1,7 +1,7 @@
 # AZ---204-Guide
 
 
-# ARM Template-
+** ARM Template **
 
 template.json file to mention the details for resource which needs to be published.
 parameters.json file to specify the parameters details to be used in template file.
@@ -12,4 +12,308 @@ iii) Resources
 iv) Outputs
 Deployment powershell command- 
 New-AzResourceGroupDeployment -Name VnetDemo -ResourceGroupName test -TemplateFile path -TemplateParameterFile path 
+Please go throgh command to create web app and other resources throgh CLI & Powershell.
+
+** Dynamic Data Masking **
+
+Azure SQL Database, Azure SQL Managed Instance, and Azure Synapse Analytics support dynamic data masking. Dynamic data masking limits sensitive data exposure by masking it to non-privileged users.
+Dynamic data masking helps prevent unauthorized access to sensitive data by enabling customers to designate how much of the sensitive data to reveal with minimal impact on the application layer. It’s a policy-based security feature that hides the sensitive data in the result set of a query over designated database fields, while the data in the database is not changed.
+
+Dynamic data masking basics:
+You set up a dynamic data masking policy in the Azure portal by selecting the Dynamic Data Masking blade under Security in your SQL Database configuration pane. This feature cannot be set using portal for SQL Managed Instance
+
+Dynamic data masking policy:
+SQL users excluded from masking - A set of SQL users or Azure AD identities that get unmasked data in the SQL query results. Users with administrator privileges are always excluded from masking, and see the original data without any mask.
+Masking rules - A set of rules that define the designated fields to be masked and the masking function that is used. The designated fields can be defined using a database schema name, table name, and column name.
+Masking functions - A set of methods that control the exposure of data for different scenarios.
+
+** Azure Web Job **
+
+Continuous:
+Starts immediately when the WebJob is created. To keep the job from ending, the program or script typically does its work inside an endless loop. If the job does end, you can restart it. Typically used with WebJobs SDK.
+Runs on all instances that the web app runs on. You can optionally restrict the WebJob to a single instance.
+Supports remote debugging.
+
+Triggered:
+Starts only when triggered manually or on a schedule.
+Runs on a single instance that Azure selects for load balancing
+Doesn't support remote debugging.
+
+** Availability Set **
+
+Fault Domain - 3 instances(MAX)
+Update Domain - 20 instance
+
+** Azure Service Bus Queue vs Azure Storage Queue **
+
+Consider using Storage queues
+As a solution architect/developer, you should consider using Storage queues when:
+Your application must store over 80 gigabytes of messages in a queue.
+Your application wants to track progress for processing a message in the queue. It's useful if the worker processing a message crashes. Another worker can then use that information to continue from where the prior worker left off.
+You require server side logs of all of the transactions executed against your queues.
+Consider using Service Bus queues
+
+As a solution architect/developer, you should consider using Service Bus queues when:
+Your solution needs to receive messages without having to poll the queue. With Service Bus, you can achieve it by using a long-polling receive operation using the TCP-based protocols that Service Bus supports.
+Your solution requires the queue to provide a guaranteed first-in-first-out (FIFO) ordered delivery.
+Your solution needs to support automatic duplicate detection.
+You want your application to process messages as parallel long-running streams (messages are associated with a stream using the session ID property on the message). In this model, each node in the consuming application competes for streams, as opposed to messages. When a stream is given to a consuming node, the node can examine the state of the application stream state using transactions.
+Your solution requires transactional behavior and atomicity when sending or receiving multiple messages from a queue.
+Your application handles messages that can exceed 64 KB but won't likely approach the 256-KB limit.
+You deal with a requirement to provide a role-based access model to the queues, and different rights/permissions for senders and receivers. For more information, see the following articles:
+Authenticate with managed identities
+Authenticate from an application
+Your queue size won't grow larger than 80 GB.
+You want to use the AMQP 1.0 standards-based messaging protocol. For more information about AMQP, see Service Bus AMQP Overview.
+You envision an eventual migration from queue-based point-to-point communication to a publish-subscribe messaging pattern. This pattern enables integration of additional receivers (subscribers). Each receiver receives independent copies of either some or all messages sent to the queue.
+Your messaging solution needs to support the "At-Most-Once" delivery guarantee without the need for you to build the additional infrastructure components.
+Your solution needs to publish and consume batches of messages.
+
+** Azure API Management **
+
+caching-type	Choose between the following values of the attribute:
+- internal to use the built-in API Management cache,
+- external to use the external cache as described in Use an external Azure Cache for Redis in Azure API Management,
+- prefer-external to use external cache if configured or internal cache otherwise.
+
+Internal cache is not available in the Consumption tier of Azure API Management. You can use an external Azure Cache for Redis instead. 
+
+downstream-caching-type	This attribute must be set to one of the following values.
+- none - downstream caching is not allowed.
+- private - downstream private caching is allowed.
+- public - private and shared downstream caching is allowed.
+
+** Application Insights **
+
+Which features of your web or mobile app are most popular? Do your users achieve their goals with your app? Do they drop out at particular points, and do they return later? Application Insights helps you gain powerful insights into how people use your app. Every time you update your app, you can assess how well it works for users. With this knowledge, you can make data driven decisions about your next development cycles.
+
+Users tool: 
+How many people used your app and its features. Users are counted by using anonymous IDs stored in browser cookies. A single person using different browsers or machines will be counted as more than one user.
+
+Sessions tool: 
+How many sessions of user activity have included certain pages and features of your app. A session is counted after half an hour of user inactivity, or after 24 hours of continuous use.
+
+Events tool: 
+How often certain pages and features of your app are used. A page view is counted when a browser loads a page from your app, provided you've instrumented it.
+
+Funnels: 
+If your application involves multiple stages, you need to know if most customers are progressing through the entire process, or if they're ending the process at some point. The progression through a series of steps in a web application is known as a funnel. You can use Application Insights Funnels to gain insights into your users, and monitor step-by-step conversion rates.
+
+Cohorts: 
+A cohort is a set of users, sessions, events, or operations that have something in common. In Application Insights, cohorts are defined by an analytics query. In cases where you have to analyze a specific set of users or events repeatedly, cohorts can give you more flexibility to express exactly the set you’re interested in.
+
+Impact: 
+Impact analyzes how load times and other properties influence conversion rates for various parts of your app. To put it more precisely, it discovers how any dimension of a page view, custom event, or request affects the usage of a different page view or custom event.
+
+Retention: 
+The retention feature in Application Insights helps you analyze how many users return to your app, and how often they perform particular tasks or achieve goals. For example, if you run a game site, you could compare the numbers of users who return to the site after losing a game with the number who return after winning. This knowledge can help you improve both your user experience and your business strategy.
+
+User Flow: 
+The User Flows tool visualizes how users navigate between the pages and features of your site. It's great for answering questions like:
+How do users navigate away from a page on your site?
+What do users click on a page on your site?
+Where are the places that users churn most from your site?
+Are there places where users repeat the same action over and over?
+
+URL ping test (classic): You can create this simple test through the portal to validate whether an endpoint is responding and measure performance associated with that response. You can also set custom success criteria coupled with more advanced features, like parsing dependent requests and allowing for retries.
+Standard test (Preview): This single request test is similar to the URL ping test. It includes SSL certificate validity, proactive lifetime check, HTTP request verb (for example GET, HEAD, or POST), custom headers, and custom data associated with your HTTP request.
+Multi-step web test (classic): You can play back this recording of a sequence of web requests to test more complex scenarios. Multi-step web tests are created in Visual Studio Enterprise and uploaded to the portal, where you can run them.
+Custom TrackAvailability test: If you decide to create a custom application to run availability tests, you can use the TrackAvailability() method to send the results to Application Insights.
+
+** Azure Redis Cache **
+
+Azure Cache for Redis provides a session state provider that you can use to store your session state in-memory with Azure Cache for Redis instead of a SQL Server database.
+IDatabase cache = connection.GetDatabase();
+Connection refers to a previously configured ConnectionMultiplexer.
+cache.StringSet("teams",")
+To specify the expiration of an item in the cache, use the TimeSpan parameter of StringSet. cache.StringSet("key1", "value1", TimeSpan.FromMinutes(90));
+
+** Azure CDN **
+
+Bypass cache: 
+Do not cache and ignore origin-provided cache-directive headers.
+
+Override: 
+Ignore origin-provided cache duration; use the provided cache duration instead. This will not override cache-control: no-cache.
+
+Set if missing: 
+Honor origin-provided cache-directive headers, if they exist; otherwise, use the provided cache duration.
+
+Cache every unique URL: 
+In this mode, each request with a unique URL, including the query string, is treated as a unique asset with its own cache. For example, the response from the origin server for a request for example.ashx?q=test1 is cached at the POP node and returned for subsequent caches with the same query string. A request for example.ashx?q=test2 is cached as a separate asset with its own time-to-live setting.
+
+Bypass caching for query strings: 
+In this mode, requests with query strings are not cached at the CDN POP node. The POP node retrieves the asset directly from the origin server and passes it to the requestor with each request.
+
+Ignore query strings:
+Default mode. In this mode, the CDN point-of-presence (POP) node passes the query strings from the requestor to the origin server on the first request and caches the asset. All subsequent requests for the asset that are served from the POP ignore the query strings until the cached asset expires.
+
+** Azure Cosmos DB **
+
+You set the highest, or maximum RU/s Tmax you don't want the system to exceed. The system automatically scales the throughput T such that 0.1* Tmax <= T <=
+Tmax.
+In this example we have autoscaleMaxThroughput = 5000, so the minimum throughput for the container is 500 R/Us.
+
+In-partition query:
+When you query data from containers, if the query has a partition key filter specified, Azure Cosmos DB automatically optimizes the query. It routes the query to the physical partitions corresponding to the partition key values specified in the filter.
+In order to be an in-partition query, the query must have an equality filter that includes the partition key
+example. DeviceId  as Partition key
+SELECT * FROM c WHERE c.DeviceId = 'XMS-0001' - Yes
+SELECT * FROM c WHERE c.DeviceId > 'XMS-0001' - No(Equality op required)
+
+Cross-partition query:
+The following query doesn't have a filter on the partition key (DeviceId). Therefore, it must fan-out to all physical partitions where it is run against each partition's index:
+SELECT * FROM c WHERE c.Location = 'Seattle`
+
+** Azure Front Door ** 
+
+Azure Front Door is a global, scalable entry-point that uses the Microsoft global edge network to create fast, secure, and widely scalable web applications. With Front Door, you can transform your global consumer and enterprise applications into robust, high-performing personalized modern applications with contents that reach a global audience through Azure.
+
+Single path purge: 
+Purge individual assets by specifying the full path of the asset (without the protocol and domain), with the file extension, for example, /pictures/strasbourg.png;
+Wildcard purge: Asterisk (*) may be used as a wildcard. Purge all folders, subfolders, and files under an endpoint with /* in the path or purge all subfolders and files under a specific folder by specifying the folder followed by /*, for example, /pictures/*.
+
+Root domain purge: 
+Purge the root of the endpoint with "/" in the path.
+
+** Azure Key Vault **
+
+Soft delete -
+When soft-delete is enabled, resources marked as deleted resources are retained for a specified period (90 days by default). The service further provides a mechanism for recovering the deleted object, essentially undoing the deletion.
+
+Purge protection -
+Purge protection is an optional Key Vault behavior and is not enabled by default. Purge protection can only be enabled once soft-delete is enabled.
+When purge protection is on, a vault or an object in the deleted state cannot be purged until the retention period has passed. Soft-deleted vaults and objects can still be recovered, ensuring that the retention policy will be followed.
+
+Secret Creation:
+var client = new SecretClient(vaultUri: new Uri(vaultUrl), credential: new DefaultAzureCredential());
+KeyVaultSecret secret = client.SetSecret("secret-name", "secret-value");
+secret = client.GetSecret("secret-name");
+
+Generate and transfer your key to the Key Vault HSM
+To generate and transfer your key to a Key Vault HSM:
+Step 1: Generate a KEK
+Step 2: Download the KEK public key
+Step 3: Generate and prepare your key for transfer
+Step 4: Transfer your key to Azure Key Vault
+
+** Service Bus Filters **
+
+SQL Filters -
+A SqlFilter holds a SQL-like conditional expression that is evaluated in the broker against the arriving messages' user-defined properties and system properties. All system properties must be prefixed with sys. in the conditional expression. The SQL-language subset for filter conditions tests for the existence of properties (EXISTS), null-values (IS NULL), logical NOT/AND/OR, relational operators, simple numeric arithmetic, and simple text pattern matching with LIKE.
+
+Boolean filters -
+The TrueFilter and FalseFilter either cause all arriving messages (true) or none of the arriving messages (false) to be selected for the subscription. These two filters derive from the SQL filter.
+
+Correlation Filters -
+A CorrelationFilter holds a set of conditions that are matched against one or more of an arriving message's user and system properties. A common use is to match against the CorrelationId property, but the application can also choose to match against the following properties:
+ContentType
+Label
+MessageId
+ReplyTo
+ReplyToSessionId
+SessionId
+To
+any user-defined properties.
+
+** Application Gateway **
+
+Azure Application Gateway is a web traffic load balancer that enables you to manage traffic to your web applications. Traditional load balancers operate at the transport layer (OSI layer 4 - TCP and UDP) and route traffic based on source IP address and port, to a destination IP address and port.
+
+Application Gateway can make routing decisions based on additional attributes of an HTTP request, for example URI path or host headers. For example, you can route traffic based on the incoming URL. So if /images is in the incoming URL, you can route traffic to a specific set of servers (known as a pool) configured for images. If /video is in the URL, that traffic is routed to another pool that's optimized for videos.
+
+Application Gateway support for multi-tenant back ends such as App service(In the Azure Application Gateway HTTP setting, enable the Use for App service setting,In the Azure Application Gateway HTTP setting, set the value of the Override backend path option to contoso22.azurewebsites.net)
+
+** VM Commands **
+
+Run command - Firewall configuration automation
+Custom script extension - The Custom Script Extension downloads and executes scripts on Azure virtual machines. This extension is useful for post deployment configuration, software installation, or any other configuration or management tasks. Scripts can be downloaded from Azure storage or GitHub, or provided to the Azure portal at extension run time.
+Serial Console- The Serial Console in the Azure portal provides access to a text-based console for virtual machines (VMs) and virtual machine scale set instances running either Linux or Windows. This serial connection connects to the ttyS0 or COM1 serial port of the VM or virtual machine scale set instance, providing access independent of the network or operating system state.
+
+** VM Generalize **
+
+A managed image resource can be created from a generalized virtual machine (VM) that is stored as either a managed disk or an unmanaged disk in a storage account. The image can then be used to create multiple VMs.
+
+Generalizing of VM using Azure PowerShell
+
+Store VM image on Azure Blob Storage
+
+** Docker File Order **
+
+FROM
+WORKDIR
+COPY
+RUN
+CMD
+
+** Storage BLOB **
+
+The purpose of the change feed is to provide transaction logs of all the changes that occur to the blobs and the blob metadata in your storage account. The change feed provides ordered, guaranteed, durable, immutable, read-only log of these changes. 
+
+Lease Blob:
+The Lease Blob operation creates and manages a lock on a blob for write and delete operations. The lock duration can be 15 to 60 seconds, or can be infinite.
+
+Hot tier:
+An online tier optimized for storing data that is accessed or modified frequently. The hot tier has the highest storage costs, but the lowest access costs.
+
+Cool tier:
+An online tier optimized for storing data that is infrequently accessed or modified. Data in the cool tier should be stored for a minimum of 30 days. The cool tier has lower storage costs and higher access costs compared to the hot tier.
+
+Archive tier:
+An offline tier optimized for storing data that is rarely accessed, and that has flexible latency requirements, on the order of hours. Data in the archive tier should be stored for a minimum of 180 days.Data in the archive tier can take up to 15 hours to rehydrate. 
+
+        // Add metadata to the dictionary by calling the Add method
+        metadata.Add("docType", "textDocuments");
+
+        // Add metadata to the dictionary by using key/value syntax
+        metadata["category"] = "guidance";
+
+        // Set the blob's metadata.
+        await blob.SetMetadataAsync(metadata);
+
+SetMetadata and SetMetadataAsync will overwrite any existing value of a property that you have set in the past.
+You can therefore either directly overwrite with a new value, or use GetMetadata(Async) first to retrieve the existing value, edit it, and then write it back using SetMetadata(Async).
+
+** App Service Plans **
+
+Shared Compute- Free & Shared tiers.
+Dedicated Compute - Basic, Standard, Premium, PremiumV2,PremiumV3.  Only apps in the same App Service plan share the same compute resources. The higher the tier, the more VM instances are available to you for scale-out.
+Isolated- This tier runs dedicated Azure VMs on dedicated Azure Virtual Networks. It provides network isolation on top of compute isolation to your apps. It provides the maximum scale-out capabilities.
+
+** System assigned managed identity vs User assigned managed identity **
+
+System assigned:
+Created as part of an Azure resource (for example, an Azure virtual machine or Azure App Service)
+Shared life cycle with the Azure resource that the managed identity is created with.
+When the parent resource is deleted, the managed identity is deleted as well.
+Can not be shared across other resources.
+VM Example PowerShell- 
+$vm = Get-AzVM -ResourceGroupName myResourceGroup -Name myVM
+Update-AzVM -ResourceGroupName myResourceGroup -VM $vm -IdentityType SystemAssigned
+
+User assigned:
+Created as a stand-alone Azure resource
+Independent life cycle. Must be explicitly deleted.
+VM Example PowerShell-
+$vm = Get-AzVM -ResourceGroupName <RESOURCE GROUP> -Name <VM NAME>
+Update-AzVM -ResourceGroupName <RESOURCE GROUP> -VM $vm -IdentityType UserAssigned -IdentityID "/subscriptions/<SUBSCRIPTION ID>/resourcegroups/<RESROURCE GROUP>/providers/Microsoft.ManagedIdentity/userAssignedIdentities/<USER ASSIGNED IDENTITY NAME>"
+Can be shared across other resources.
+
+** Hosting Docker Image & Mapping Domain Names Command **
+
+Step 1:
+Variable Declarations 
+appName="";
+
+Step 2:
+Web app creation
+az webapp create --name webappname --plan appserviceplan --resource-group resourcename
+
+Step 3:
+Hosting Docker Image
+az webapp config container set --docker-custom-image-name imagename --name webappname --resource-group resourcename
+
+Step 4:
+Mapping custom domain name
+az webapp config hostname add --webapp-name webappname --resource-group resourcename --hostname hostname 
 
